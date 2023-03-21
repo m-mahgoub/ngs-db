@@ -1,0 +1,37 @@
+body {
+    margin: 40px;
+  }
+  
+  .index_wrapper {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+  }
+  .sources_button {
+  grid-area: 2 / 3 / 3 / 5;
+  background-color: green
+  }
+  .samples_button{
+  grid-area: 3 / 3 / 4 / 5;
+  background-color: #a86f32;
+  }
+  .experiments_button {
+  grid-area: 4 / 3 / 5 / 5;
+  background-color: purple;
+  }
+  
+  .index_box {
+    color: #fff;
+    border-radius: 30px;
+    padding: 20px;
+    font-size: 300%;
+    text-align: center;
+    margin-top:    10px;
+    margin-bottom: 10px;
+  }
+
+  a {
+    color: inherit;
+  }
