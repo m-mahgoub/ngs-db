@@ -20,8 +20,8 @@ def sample_table():
     return render_template('sample_table.html')
 
 
-@app.route('/api/data')
-def data():
+@app.route('/api/source_data')
+def source_data():
     query = Source.query
 
     # search filter
@@ -59,9 +59,55 @@ def data():
 
     # response
     return {
-        'data': [source.to_dict() for source in query],
+        'source_data': [source.to_dict() for source in query],
         'total': total,
     }
+    
+    
+    
+@app.route('/api/sample_data')
+def sample_data():
+    query = Sample.query
+
+    # search filter
+    search = request.args.get('search')
+    if search:
+        query = query.filter(db.or_(
+            Sample.usn.like(f'%{search}%'),
+            Sample.upn.like(f'%{search}%'),
+            Sample.name.like(f'%{search}%'),
+            Sample.type.like(f'%{search}%')
+        ))
+    total = query.count()
+
+    # sorting
+    sort = request.args.get('sort')
+    if sort:
+        order = []
+        for s in sort.split(','):
+            direction = s[0]
+            name = s[1:]
+            if name not in ['usn', 'upn', 'name', 'type', 'collectiondate', 'time_point_weeks']:
+                name = 'name'
+            col = getattr(Sample, name)
+            if direction == '-':
+                col = col.desc()
+            order.append(col)
+        if order:
+            query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int, default=-1)
+    length = request.args.get('length', type=int, default=-1)
+    if start != -1 and length != -1:
+        query = query.offset(start).limit(length)
+
+    # response
+    return {
+        'sample_data': [sample.to_dict() for sample in query],
+        'total': total,
+    }
+
 
 
 if __name__ == '__main__':

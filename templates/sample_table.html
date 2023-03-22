@@ -12,7 +12,7 @@
     <div>
       <h1>Sample Table</h1>
       <hr>
-      <div id="table"></div>
+      <div id="sample_table"></div>
     </div>
     <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
     <script>
@@ -22,17 +22,16 @@
 
       new gridjs.Grid({
         columns: [
+          { id: 'usn', name: 'Sample ID' },
           { id: 'upn', name: 'UPN' },
-          { id: 'name', name: 'Label' },
-          { id: 'age', name: 'Age' },
-          { id: 'sex', name: 'Sex' },
-          { id: 'dx', name: 'Diagnosis' },
-          { id: 'karyotype', name: 'Karyotype' },
-          { id: 'fab', name: 'FAB Classification' },
+          { id: 'name', name: 'Sample Name' },
+          { id: 'type', name: 'Type' },
+          { id: 'collectiondate', name: 'Collection Date' },
+          { id: 'time_point_weeks', name: 'Weeks since Diagnosis' }
         ],
         server: {
-          url: '/api/data',
-          then: results => results.data,
+          url: '/api/sample_data',
+          then: results => results.sample_data,
           total: results => results.total,
         },
         search: {
@@ -56,7 +55,7 @@
           multiColumn: true,
           server: {
             url: (prev, columns) => {
-              const columnIds = ['upn', 'name', 'age', 'sex', 'dx', 'karyotype', 'fab'];
+              const columnIds = ['usn', 'upn', 'name', 'type', 'collectiondate', 'time_point_weeks'];
               const sort = columns.map(col => (col.direction === 1 ? '+' : '-') + columnIds[col.index]);
               return updateUrl(prev, {sort});
             },
@@ -70,7 +69,7 @@
             },
           },
         },
-      }).render(document.getElementById('table'));
+      }).render(document.getElementById('sample_table'));
     </script>
   </body>
 </html>
