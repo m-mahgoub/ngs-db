@@ -1,0 +1,12 @@
+#info_title {
+    margin-bottom:60px ;
+    margin-top:80px ;
+    font-size: 25px;
+    font-weight: bolder;
+    font-family: Sans-Serif;
+  }
+  #details_table {
+    font-family: Sans-Serif;
+    font-size: 18px;
+    width: 70%;
+  }

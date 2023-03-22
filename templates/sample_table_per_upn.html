@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Server-Driven Table</title>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: Sans-Serif;
+      }
+    </style>
+  </head>
+  {% include 'navbar.html' %}
+  <body>
+    <div>
+      <h1>Sample Table</h1>
+      <hr>
+      <div id="sample_table"></div>
+    </div>
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+      const updateUrl = (prev, query) => {
+        return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
+      };
+
+      new gridjs.Grid({
+        columns: [
+          { id: 'usn', name: 'Sample ID', formatter: (_, row) => gridjs.html(`<a href="/sample_details/${row.cells[0].data}">${row.cells[0].data}</a>`) },
+          { id: 'upn', name: 'UPN' , formatter: (_, row) => gridjs.html(`<a href="/source_details/${row.cells[1].data}">${row.cells[1].data}</a>`) },
+          { id: 'name', name: 'Sample Name' },
+          { id: 'type', name: 'Type' },
+          { id: 'collectiondate', name: 'Collection Date' },
+          { id: 'time_point_weeks', name: 'Weeks since Diagnosis' }
+        ],
+        data: [
+          {% for sample in samples %}
+            {
+              usn: {{ sample.usn }},
+              upn: {{ sample.upn }},
+              name: '{{ sample.name }}',
+              type: '{{ sample.type }}',
+              collectiondate: '{{ sample.collectiondate }}',
+              time_point_weeks : {{ sample.time_point_weeks }}
+            },
+          {% endfor %}
+        ],
+        search: {
+          selector: (cell, rowIndex, cellIndex) => [0, 1, 2, 3].includes(cellIndex) ? cell : null,
+        },
+        sort: true,
+        pagination: true,
+      }).render(document.getElementById('sample_table'));
+    </script>
+  </body>
+</html>

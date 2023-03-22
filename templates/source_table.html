@@ -9,6 +9,7 @@
     </style>
   </head>
   <body>
+    {% include 'navbar.html' %}
     <div>
       <h1>Source Table</h1>
       <hr>
@@ -20,9 +21,9 @@
         return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
       };
 
-      new gridjs.Grid({
+const grid = new gridjs.Grid({
         columns: [
-          { id: 'upn', name: 'UPN' },
+          { id: 'upn', name: 'UPN', formatter: (_, row) => gridjs.html(`<a href="/source_details/${row.cells[0].data}">${row.cells[0].data}</a>`) },
           { id: 'name', name: 'Label' },
           { id: 'age', name: 'Age' },
           { id: 'sex', name: 'Sex' },
@@ -71,6 +72,7 @@
           },
         },
       }).render(document.getElementById('table'));
+    
     </script>
   </body>
 </html>

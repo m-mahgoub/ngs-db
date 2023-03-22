@@ -8,6 +8,7 @@
       }
     </style>
   </head>
+  {% include 'navbar.html' %}
   <body>
     <div>
       <h1>Sample Table</h1>
@@ -20,10 +21,10 @@
         return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
       };
 
-      new gridjs.Grid({
+const grid = new gridjs.Grid({
         columns: [
-          { id: 'usn', name: 'Sample ID' },
-          { id: 'upn', name: 'UPN' },
+          { id: 'usn', name: 'Sample ID', formatter: (_, row) => gridjs.html(`<a href="/sample_details/${row.cells[0].data}">${row.cells[0].data}</a>`) },
+          { id: 'upn', name: 'UPN', formatter: (_, row) => gridjs.html(`<a href="/source_details/${row.cells[1].data}">${row.cells[1].data}</a>`) },
           { id: 'name', name: 'Sample Name' },
           { id: 'type', name: 'Type' },
           { id: 'collectiondate', name: 'Collection Date' },

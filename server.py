@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from models import *
-
+from flask import Flask, render_template, Response, request, redirect, url_for
 
 
 db.create_all()
 
+app.url_map.strict_slashes = False
 
 @app.route('/')
 def index():
@@ -108,7 +109,21 @@ def sample_data():
         'total': total,
     }
 
+@app.route('/samples/<int:upn_id>')
+def sample_table_per_upn(upn_id):
+    query = Sample.query.filter_by(upn=upn_id).all()
+    return render_template('sample_table_per_upn.html', samples=query)
 
+@app.route('/sample_details/<int:usn_id>')
+def sample_details(usn_id):
+    query = Sample.query.filter_by(usn=usn_id).first()
+    return render_template('sample_details.html', sample=query)
+
+@app.route('/source_details/<int:upn_id>')
+def source_details(upn_id):
+    query = Source.query.filter_by(upn=upn_id).first()
+    upn_samples_number = len(Sample.query.filter_by(upn=upn_id).all())
+    return render_template('source_details.html', source=query, upn_samples_number=upn_samples_number)
 
 if __name__ == '__main__':
     app.run()
